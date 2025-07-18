@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Wifey 💗</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #ffe6f0, #fff0f5);
+            font-family: 'Dancing Script', cursive;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 2em;
+            color: #d6336c;
+            text-align: center;
+            margin-top: 30vh;
+            padding: 0 20px;
+        }
+        .heart {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: pink;
+            transform: rotate(45deg);
+            animation: float 6s linear infinite;
+            opacity: 0.6;
+        }
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: pink;
+            border-radius: 50%;
+        }
+        .heart::before {
+            top: -10px;
+            left: 0;
+        }
+        .heart::after {
+            left: -10px;
+            top: 0;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(45deg); opacity: 0.6; }
+            100% { transform: translateY(-100vh) rotate(45deg); opacity: 0; }
+        }
+        audio {
+            display: block;
+            margin: 20px auto;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body onclick="shootConfetti()">
+    <h1 id="message"></h1>
+    <audio controls autoplay loop>
+        <source src="ishq_mubarak.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <canvas id="confetti"></canvas>
+
+    <script>
+        const message = "My wifey 💍, every day with you feels like a blessing 🌸. You’re not just my love, you’re my jaan ❤️ — the reason my heart beats. Your smile cutie 😊, lights up even my darkest days 🌟. I thank the universe 🌌 for bringing you into my life. With you by my side, I feel complete 🥰. No matter where life takes us, my love for you will never change 💖. You're my today, my tomorrow, and my always ♾️.";
+        let i = 0;
+        function typeWriter() {
+            if (i < message.length) {
+                document.getElementById("message").innerHTML += message.charAt(i);
+                i++;
+                setTimeout(typeWriter, 60);
+            }
+        }
+        typeWriter();
+
+        function createHearts() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHearts, 500);
+
+        // Confetti
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+
+        function shootConfetti() {
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height,
+                    color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                    radius: Math.random() * 6 + 2,
+                    speed: Math.random() * 4 + 2,
+                    dx: (Math.random() - 0.5) * 4
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                p.y -= p.speed;
+                p.x += p.dx;
+                if (p.y < 0) particles.splice(index, 1);
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
